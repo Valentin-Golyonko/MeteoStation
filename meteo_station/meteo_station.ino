@@ -1,21 +1,24 @@
 // project done for Arduino Nano v3 by Valentin Golyonko (Valentin8Dev@gmail.com)
 // with using:
-//  Arduino Nano v3, 2.90$
-//  DHT-22 - digital temperature and humidity sensor, Pin - , 2.52$
-//  MQ-135 - air quality and hazardous gas detection sensor, Pin - , 0.80$
-//  128x64 OLED LCD 0.96" (i2c), Pin - , 2.33$
-//  BMP280 - digital barometric pressure altitude sensor (i2c), Pin - , 0.81$
-//  DS3231 AT24C32 - clock memory module (i2c) Pin - , 0.89$
-//  1-channel 5V relay, Pin - , 0.52$
-//  RGB LED Strip 5050 DC12V 5m, 7.81$ 5m
-//  HC-06 Bluetooth (v2.0), Pins - , 2.78$
-//  HC-SR501 - infrared PIR motion sensor, Pin - , 0.80$
-//  PCB 5x7cm double-side, 0.30$
+//  Arduino Nano v3 - 2.90$
+//  DHT-22 - digital temperature and humidity sensor - 2.52$
+//  MQ-135 - air quality and hazardous gas detection sensor - 0.80$
+//  128x64 OLED LCD 0.96" (i2c) - 2.33$
+//  BMP280 - digital barometric pressure altitude sensor (i2c) - 0.81$
+//  DS3231 AT24C32 - clock memory module (i2c) - 0.89$
+//  1-channel 5V relay - 0.52$
+//  RGB LED Strip 5050 DC12V 5m - 7.81$ 5m
+//  HC-06 Bluetooth (v2.0)- 2.78$
+//  HC-SR501 - infrared PIR motion sensor - 0.80$
+//  PCB 5x7cm double-side - 0.30$
 //
 //    summ = 22.84$ (15.03 without Led Strip)
 //
 // hint! => delete Serial.begin(9600) and connected declarations
 //          to reduce dynamic memory by 193 bytes (9%)
+// ! you need next libraries:
+//    MQ135 (from github), Adafruit_BMP280_Library, DHT_sensor_library,
+//    RTClib, Adafruit_SSD1306, Adafruit_GFX_Library.
 
 #include <SoftwareSerial.h>
 #include <DHT.h>
@@ -66,7 +69,7 @@ int buzzerPin = 2;
 
 RTC_DS3231 rtc;
 
-#define REDPIN 10
+#define REDPIN 10 // RGB Streep pins
 #define GREENPIN 11
 #define BLUEPIN 9
 int r_in = 100, g_in = 100, b_in = 100;
@@ -86,7 +89,7 @@ int flag = 1;
 bool blt = false;
 char ch_data[4];
 
-// temperature correction after 5 min work, because of self heating !
+// temperature correction after 10 min work, because of self heating !
 bool correction_t = true;
 bool correction_delta = true;
 float t1_zero, t2_zero;
@@ -251,8 +254,8 @@ void ListenBlt() {
 }
 
 void GetCommand(int in) {
-  // Получаем номер пина путем целочисленного деления (находим 1е число == пина)
-  // и нужное нам действие за счет получения остатка от деления на 1000.
+  // We obtain the pin number by integer division (we find 1 number == pin)
+  // and the action we need by obtaining the remainder of the division by 1000.
   switch (in / 1000) {
     case 1: // start transmition date
       Transmit(t1, t2, h, a, d, p, r);
@@ -323,8 +326,8 @@ void PinStatus() {
   t1 = dht.readTemperature(); // deviation from standard value
   // or dht.readTemperature(true) for Fahrenheit
   h = dht.readHumidity();     // deviation from standard value
-  a = gasSensor.getCorrectedPPMZero(t1, h);
-  //a = gasSensor.getCorrectedPPM(t1, h);
+  //a = gasSensor.getCorrectedPPMZero(t1, h); // my 'hardCode'
+  a = gasSensor.getCorrectedPPM(t1, h);
   r = digitalRead(relayPin);  // relayState
   p = digitalRead(pirInputPin); // pirState
   t2 = bmp.readTemperature(); // deviation from standard value
