@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="valentin8dev.by.MeteoStation.MainActivity">
+
+    <item
+        android:id="@+id/options_menu_graphics_update"
+        android:icon="@android:drawable/stat_notify_sync_noanim"
+        android:showAsAction="ifRoom"
+        android:title="@string/opt_menu_update"
+        tools:ignore="AppCompatResource"/>
+
+</menu>

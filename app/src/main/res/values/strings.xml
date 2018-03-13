@@ -1,0 +1,47 @@
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="app_name">Meteo Station</string>
+
+    <!--  BluetoothChat -->
+    <string name="send">Send</string>
+    <string name="not_connected">You are not connected to a device</string>
+    <string name="bt_not_enabled_leaving">Bluetooth was not enabled. Leaving Bluetooth Chat.</string>
+    <string name="title_connecting">connecting…</string>
+    <string name="title_connected_to">connected to <xliff:g id="device_name">%1$s</xliff:g></string>
+    <string name="title_not_connected">not connected</string>
+
+    <!--  DeviceListActivity -->
+    <string name="scanning">scanning for devices…</string>
+    <string name="select_device">select a device to connect</string>
+    <string name="none_paired">No devices have been paired</string>
+    <string name="none_found">No devices found</string>
+    <string name="title_paired_devices">Paired Devices</string>
+    <string name="title_other_devices">Other Available Devices</string>
+    <string name="button_scan">Scan for devices</string>
+
+    <!-- Options Menu -->
+    <string name="secure_connect">Connect a device - Secure</string>
+    <string name="insecure_connect">Connect a device - Insecure</string>
+    <string name="discoverable">Make discoverable</string>
+
+    <string name="pir_on">PIR On</string>
+    <string name="pir_off">PIR Off</string>
+    <string name="sw_bluetooth">Bluetooth</string>
+    <string name="tv_temperature_1">-1.1 °C</string>
+    <string name="tv_humidity">-1.1 %</string>
+    <string name="tv_air">-1.1 AirQ</string>
+    <string name="tv_temperature_2">-1.1 °C</string>
+    <string name="tv_pressure">-1.1 mm.rs</string>
+    <string name="tv_pir">PIR On</string>
+    <string name="tv_voice_output">Voice Output</string>
+    <string name="sw_rgb_light">RGB Light</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_about">About</string>
+    <string name="btn_OK">OK</string>
+    <string name="appwidget_text">zero</string>
+    <string name="configure">Configure</string>
+    <string name="add_widget">Add widget</string>
+    <string name="menu_graphics">Graphics</string>
+    <string name="opt_menu_update">update</string>
+    <string name="github_page">My github page: \n https://github.com/Valentin-Golyonko</string>
+    <string name="alarm">ALARM</string>
+</resources>

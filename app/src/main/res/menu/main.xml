@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context="valentin8dev.by.MeteoStation.MainActivity">
+
+    <item
+        android:id="@+id/menu_graphics"
+        android:icon="@android:drawable/ic_menu_crop"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_graphics"
+        tools:ignore="AppCompatResource"/>
+
+    <item
+        android:id="@+id/menu_about"
+        android:icon="@android:drawable/ic_dialog_info"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_about"
+        tools:ignore="AppCompatResource"/>
+
+</menu>
