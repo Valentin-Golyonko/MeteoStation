@@ -12,10 +12,11 @@
 //  HC-SR501 - infrared PIR motion sensor - 0.80$
 //  PCB 5x7cm double-side - 0.30$
 //
-//    summ = 22.84$ (15.03 without Led Strip)
+//    summary = 22.84$ (or 15.03 without Led Strip)
 //
-// hint! => delete Serial.begin(9600) and connected declarations
+// hint! => delete Serial.begin(9600) and connected declarations after debugging
 //          to reduce dynamic memory by 193 bytes (9%)
+//
 // ! you need next libraries:
 //    MQ135 (from github), Adafruit_BMP280_Library, DHT_sensor_library,
 //    RTClib, Adafruit_SSD1306, Adafruit_GFX_Library.
@@ -60,8 +61,8 @@ MQ135 gasSensor = MQ135(MQ135_PIN);
 
 int relayPin = 3;
 bool light_always = false;
-#define BlueLedPin 12
-#define GreenLedPin 8
+#define BlueLedPin 12   // power on indicator
+#define GreenLedPin 8   // bluetooth connected indicator
 
 int pirInputPin = 4;  // choose the input pin (for PIR sensor)
 int pir = LOW;        // we start, assuming no motion detected
@@ -69,7 +70,7 @@ int buzzerPin = 2;
 
 RTC_DS3231 rtc;
 
-#define REDPIN 10 // RGB Streep pins
+#define REDPIN 10 // RGB Strip pins
 #define GREENPIN 11
 #define BLUEPIN 9
 int r_in = 100, g_in = 100, b_in = 100;
@@ -99,7 +100,7 @@ float delta_t2 = 0;
 void setup() {
 
   // UART speed
-  //  Serial.begin(9600);
+  //Serial.begin(9600);
   SerialBLE.begin(9600);
 
   // actions with display
@@ -152,7 +153,7 @@ void loop() {
     previousMillis_1 = currentMillis;
 
     if (blt) {
-      // transmite date to android app over bluetooth
+      // transfer date to android app over bluetooth
       Transmit(t1, t2, h, a, d, p, r);
     }
   }
@@ -218,7 +219,7 @@ void loop() {
     }
   }
 
-  // temperature correction: get offcet
+  // temperature correction: get offset
   if (correction_delta) {
     if (currentMillis - previousMillis_6 >= 600000) { // temer = 10 min
       delta_t1 = t1 - t1_zero;
@@ -237,9 +238,10 @@ void ListenBlt() {
       delay(10);    // magic! for stable receiving
       //      Serial.println("-----------");
       //      Serial.println(ch_data[i], DEC);
-      count++;      // i use only 2 bytes (2^16-1), ex-pl:  0010 0011 1101 1100  = 9180 (int)
+      count++;
+      // i use only 2 bytes (2^16-1), ex-pl:  0010 0011 1101 1100  = 9180 (int)
       if (count == 4) {
-        // convert byte to int ;  may be,  int i = atoi(intBuffer) ?
+        // convert byte to int ;  may be:  int i = atoi(intBuffer) ?
         int a = (int)(unsigned char)(ch_data[0]) << 24 |
                 (unsigned char)(ch_data[1]) << 16 |
                 (unsigned char)(ch_data[2]) << 8 |
@@ -257,7 +259,7 @@ void GetCommand(int in) {
   // We obtain the pin number by integer division (we find 1 number == pin)
   // and the action we need by obtaining the remainder of the division by 1000.
   switch (in / 1000) {
-    case 1: // start transmition date
+    case 1: // start data transfer
       Transmit(t1, t2, h, a, d, p, r);
       blt = true;
       period = (in % 1000) * 1000;  // in % 1000 = 5 -> 5sec = 5000ms
@@ -265,13 +267,13 @@ void GetCommand(int in) {
       //      Serial.println(blt);
       //      Serial.println(period);
       break;
-    case 2: // stop transmition date
+    case 2: // stop date transfer
       blt = false;
       digitalWrite(GreenLedPin, LOW);
       //      Serial.println(blt);
       break;
     case 3:
-      // 3002 <= in <= 3000, relayPin + on always / off
+      // 3002 <= in <= 3000, relayPin + ON always / OFF
       switch (in % 1000) {
         case 2: // TODO: last saved on devaice
           digitalWrite(relayPin , 1);

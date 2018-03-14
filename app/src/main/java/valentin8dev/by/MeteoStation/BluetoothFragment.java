@@ -347,7 +347,6 @@ public class BluetoothFragment extends Fragment {
         }
     }
 
-    // TODO: does't Torn ON RGB-strip ???
     private void changeRgbLight() {
         // Launch the RGBLightSelect Fragment to select RGB-color
         FragmentManager fmL = getActivity().getSupportFragmentManager();
