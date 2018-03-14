@@ -1,7 +1,13 @@
 # MeteoStation
-The application reads data from a home weather station built on arduino.
+The application reads data over bluetooth from a home weather station built on arduino nano v3.
 
-Project done for Arduino Nano v3 with using:
+<p>Arduino firmware file:
+<a href="https://github.com/Valentin-Golyonko/MeteoStation/blob/master/meteo_station/meteo_station.ino">meteo_station.ino</a></p>
+
+<p>All components before soldering:</p>
+<img src="https://github.com/Valentin-Golyonko/MeteoStation/blob/master/meteo_station/before_soldering.jpg" alt="befor_soldering">
+
+<p>The project uses the following components:</p>
 <p>&nbsp&nbsp  Arduino Nano v3, 2.90$</p>
 <p>&nbsp&nbsp  DHT-22 - digital temperature and humidity sensor, 2.52$</p>
 <p>&nbsp&nbsp  MQ-135 - air quality and hazardous gas detection sensor, 0.80$</p>
@@ -14,11 +20,4 @@ Project done for Arduino Nano v3 with using:
 <p>&nbsp&nbsp  HC-SR501 - infrared PIR motion sensor, 0.80$</p>
 <p>&nbsp&nbsp  PCB 5x7cm double-side, 0.30$</p>
 
-<p>&nbsp&nbsp&nbsp    Summ = 22.84$ (or 15.03$ without Led Strip)
-
-
-<p>Arduino firmware file:
-<a href="https://github.com/Valentin-Golyonko/MeteoStation/blob/master/meteo_station/meteo_station.ino">meteo_station.ino</a></p>
-
-<p>All components before soldering:</p>
-<img src="https://github.com/Valentin-Golyonko/MeteoStation/blob/master/meteo_station/before_soldering.jpg" alt="befor_soldering">
+<p>&nbsp&nbsp&nbsp    Summ = 22.84$ (or 15.03$ without Led Strip)</p>
