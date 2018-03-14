@@ -14,8 +14,11 @@ Project done for Arduino Nano v3 with using:
 <p>&nbsp&nbsp  HC-SR501 - infrared PIR motion sensor, 0.80$<p>
 <p>&nbsp&nbsp  PCB 5x7cm double-side, 0.30$<p>
 
-<p>&nbsp&nbsp&nbsp    Summ = 22.84$ (15.03 without Led Strip)
+<p>&nbsp&nbsp&nbsp    Summ = 22.84$ (or 15.03$ without Led Strip)
 
 
 Arduino firmware file:
 <a href="https://github.com/Valentin-Golyonko/MeteoStation/blob/master/meteo_station/meteo_station.ino">meteo_station.ino</a>
+
+All components before soldering:
+<img src="https://github.com/Valentin-Golyonko/MeteoStation/blob/master/meteo_station/befor_soldering.png">
