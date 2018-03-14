@@ -44,52 +44,32 @@ class InputRecognition {
 
             for (int i = 0; i < input_length; i++) {
                 switch (input.charAt(i)) {
-                    case 't':
-                        t = i + 1;
-                        break;
-                    case 'z':
-                        z = i - 1;
-                        break;
-                    case 'h':
-                        h = i + 1;
-                        break;
-                    case 'y':
-                        y = i - 1;
-                        break;
-                    case 'a':
-                        a = i + 1;
-                        break;
-                    case 'x':
-                        x = i - 1;
-                        break;
-                    case 'j':
-                        j = i + 1;
-                        break;
-                    case 'q':
-                        q = i;
-                        break;
-                    case 'l':
-                        l = i + 1;
-                        break;
-                    case 'w':
-                        w = i;
-                        break;
-                    case 'p':
-                        p = i + 1;
-                        break;
-                    case 'u':
-                        u = i;
-                        break;
-                    case 'd':
-                        d = i + 1;
-                        break;
-                    case 's':
-                        s = i;
-                        break;
+                    case 't': t = i + 1; break;
+                    case 'z': z = i - 1; break;
+                    case 'h': h = i + 1; break;
+                    case 'y': y = i - 1; break;
+                    case 'a': a = i + 1; break;
+                    case 'x': x = i - 1; break;
+                    case 'j': j = i + 1; break;
+                    case 'q': q = i; break;
+                    case 'l': l = i + 1; break;
+                    case 'w': w = i; break;
+                    case 'p': p = i + 1; break;
+                    case 'u': u = i; break;
+                    case 'd': d = i + 1; break;
+                    case 's': s = i; break;
                 }
             }
 
-            buildString(input);
+            tempr = parameter(input, t, z);
+            humid = parameter(input, h, y);
+            air = parameter(input, a, x);
+            tempr2 = parameter(input, j, q);
+            rgbLight = parameter(input, l, w);
+            pirSensor = parameter(input, p, u);
+            pressure = parameter(input, d, s);
+
+            //buildString(input);
 
             if (MyWidget.isWidgetOn()) {
                 BluetoothFragment.mBluetoothService.stop();
@@ -98,6 +78,22 @@ class InputRecognition {
         }
 
         setDate_came(false);
+    }
+
+    private static String parameter(String in, int from, int to) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(in);
+
+        String param = "";
+
+        if (from != -1 && to != -1) {
+            int stringSize = to - from;
+            if (stringSize > 0) {
+                param = stringBuilder.substring(from, to);
+            }
+        }
+        //Log.d(TAG, "param " + param);
+        return param;
     }
 
     private static void buildString(String in) {
