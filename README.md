@@ -21,4 +21,4 @@ Arduino firmware file:
 <a href="https://github.com/Valentin-Golyonko/MeteoStation/blob/master/meteo_station/meteo_station.ino">meteo_station.ino</a>
 
 All components before soldering:
-<img src="https://github.com/Valentin-Golyonko/MeteoStation/blob/master/meteo_station/befor_soldering.jpg">
+<img src="https://github.com/Valentin-Golyonko/MeteoStation/blob/master/meteo_station/befor_soldering.jpg" alt="befor_soldering">
