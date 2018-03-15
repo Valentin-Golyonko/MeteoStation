@@ -384,8 +384,6 @@ public class BluetoothFragment extends Fragment {
 
         tvAirq.setText(String.format("%s AirQ", InputRecognition.air));
 
-        tvTempr2.setText(String.format("%s °C", InputRecognition.tempr2));
-
         String rgbLight = InputRecognition.rgbLight;
         if (rgbLight.equals("1")) {
             switch_rgbLight.setChecked(true);
@@ -411,7 +409,10 @@ public class BluetoothFragment extends Fragment {
 
         tvPressure.setText(String.format("%s mm.rs", InputRecognition.pressure));
 
-        if (InputRecognition.getT2Size() != 0) {
+        int t2Size = InputRecognition.getT2Size();
+        if (t2Size > 0) {
+            float t2 = InputRecognition.getT2Array().get(t2Size - 1);
+            tvTempr2.setText(String.format("%s °C", t2));
             graphicBF();
         }
     }

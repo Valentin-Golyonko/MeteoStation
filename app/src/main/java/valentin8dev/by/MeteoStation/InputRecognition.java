@@ -14,8 +14,8 @@ class InputRecognition {
             pirSensor = "--", pressure = "--", rgbLight = "--";
 
     // TODO: move to dif-t class, using Android Architecture Components
-    static ArrayList<Float> fA = new ArrayList<>();
-    static ArrayList<String> valuesA = new ArrayList<>();
+    static ArrayList<Float> fA = new ArrayList<>(); // fake array
+    static ArrayList<String> valuesA = new ArrayList<>();   // array for current time
 
     private static int t = -1, z = -1, h = -1, y = -1, a = -1, x = -1, j = -1, q = -1,
             l = -1, w = -1, p = -1, u = -1, d = -1, s = -1;
@@ -45,11 +45,11 @@ class InputRecognition {
             for (int i = 0; i < input_length; i++) {
                 switch (input.charAt(i)) {
                     case 't': t = i + 1; break;
-                    case 'z': z = i - 1; break;
+                    case 'z': z = i; break;
                     case 'h': h = i + 1; break;
-                    case 'y': y = i - 1; break;
+                    case 'y': y = i; break;
                     case 'a': a = i + 1; break;
-                    case 'x': x = i - 1; break;
+                    case 'x': x = i; break;
                     case 'j': j = i + 1; break;
                     case 'q': q = i; break;
                     case 'l': l = i + 1; break;
@@ -62,14 +62,26 @@ class InputRecognition {
             }
 
             tempr = parameter(input, t, z);
-            humid = parameter(input, h, y);
-            air = parameter(input, a, x);
-            tempr2 = parameter(input, j, q);
-            rgbLight = parameter(input, l, w);
-            pirSensor = parameter(input, p, u);
-            pressure = parameter(input, d, s);
+            t = z = -1;
 
-            //buildString(input);
+            humid = parameter(input, h, y);
+            h = y = -1;
+
+            air = parameter(input, a, x);
+            a = x = -1;
+
+            parameter_new(input, j, q, t2Array);
+            setT2Size(t2Array.size());
+            j = q = -1;
+
+            rgbLight = parameter(input, l, w);
+            l = w = -1;
+
+            pirSensor = parameter(input, p, u);
+            p = u = -1;
+
+            pressure = parameter(input, d, s);
+            d = s = -1;
 
             if (MyWidget.isWidgetOn()) {
                 BluetoothFragment.mBluetoothService.stop();
@@ -80,102 +92,49 @@ class InputRecognition {
         setDate_came(false);
     }
 
+    /** Method build string from input values, convert them to float and store in array */
+    // NEW version, need to implement to all elements.
+    private static void parameter_new(String in, int from, int to, ArrayList<Float> arrayList) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(in);
+
+        if (from != -1 && to != -1) {
+            int stringSize = to - from;
+            if (stringSize > 0) { // protection from outOfBoundEx-n
+                String param = stringBuilder.substring(from, to);
+                //Log.d(TAG, "param " + param);
+
+                if (param != null && !param.equals(" NAN")) {
+                    arrayList.add(Float.parseFloat(param)); // TODO: don't know why, but it works!
+                    //Log.d(TAG, "arrayList " + arrayList.toString());
+                }
+
+                DateFormat dateFormat = DateFormat.getTimeInstance(DateFormat.SHORT);
+                Date dateTime = new Date();
+                String time = dateFormat.format(dateTime);
+
+                fA.add(ii++);
+                valuesA.add(time);
+            }
+        }
+    }
+
+    // Old version
     private static String parameter(String in, int from, int to) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(in);
 
-        String param = "";
-
         if (from != -1 && to != -1) {
             int stringSize = to - from;
-            if (stringSize > 0) {
-                param = stringBuilder.substring(from, to);
+            //Log.d(TAG, "from " + from + " to " + to + " s " + stringSize);
+            if (stringSize > 0) { // protection from outOfBoundEx-n
+                String param = stringBuilder.substring(from, to);
+                //Log.d(TAG, "param " + param);
+
+                return param;
             }
         }
-        //Log.d(TAG, "param " + param);
-        return param;
-    }
-
-    private static void buildString(String in) {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(in);
-
-        if (t != -1 && z != -1) {
-            tempr = stringBuilder.substring(t, z);
-            //Log.d(TAG, "tempr " + tempr);
-
-            t = -1;
-            z = -1;
-        } else {    // if date did not came
-            tempr = "";
-        }
-        if (h != -1 && y != -1) {
-            humid = stringBuilder.substring(h, y);
-            //Log.d(TAG, "humid " + humid);
-            h = -1;
-            y = -1;
-        } else {
-            humid = "";
-        }
-        if (a != -1 && x != -1) {
-            air = stringBuilder.substring(a, x);
-
-            //Log.d(TAG, "air " + air);
-            a = -1;
-            x = -1;
-        } else {
-            air = "";
-        }
-        if (j != -1 && q != -1) {
-            tempr2 = stringBuilder.substring(j, q);
-            //Log.d(TAG, "tempr2 " + tempr2);
-
-            buildT2Array();
-
-            j = -1;
-            q = -1;
-        } else {
-            tempr2 = "";
-        }
-        if (l != -1 && w != -1) {
-            rgbLight = stringBuilder.substring(l, w);
-            l = -1;
-            w = -1;
-        } else {
-            rgbLight = "";
-        }
-        if (p != -1 && u != -1) {
-            pirSensor = stringBuilder.substring(p, u);
-            p = -1;
-            u = -1;
-        } else {
-            pirSensor = "";
-        }
-        if (d != -1 && s != -1) {
-            pressure = stringBuilder.substring(d, s);
-            //Log.d(TAG, "pressure " + pressure);
-            d = -1;
-            s = -1;
-        } else {
-            pressure = "";
-        }
-    }
-
-    private static void buildT2Array() {
-        if (tempr2 != null && !tempr2.equals(" NAN")) {
-            t2Array.add(Float.parseFloat(tempr2));
-            setT2Size(t2Array.size());
-            //Log.d(TAG, "t2Array " + t2Array.toString());
-        }
-
-        DateFormat dateFormat = DateFormat.getTimeInstance(DateFormat.SHORT);
-        Date dateTime = new Date();
-        String time = dateFormat.format(dateTime);
-
-        fA.add(ii++);
-        //Log.d(TAG, "ii: " + ii + " fA: " + fA);
-        valuesA.add(time);
-        //Log.d(TAG, "values " + valuesA);
+        return "-1";
     }
 
     static ArrayList<Float> getT2Array() {
