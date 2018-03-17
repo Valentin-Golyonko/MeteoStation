@@ -31,11 +31,12 @@
             android:orientation="horizontal">
 
             <TextView
+                android:text="asdsadadadada"
                 android:id="@+id/colorPickerTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:textColor="@color/colorAccent"
+                android:textColor="@color/colorPrimaryText"
                 android:textSize="20sp"
                 android:textStyle="bold"/>
         </LinearLayout>

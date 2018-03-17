@@ -50,14 +50,13 @@ bool light_always = false;
 
 int pirInputPin = 4;  // choose the input pin (for PIR sensor)
 int pir = LOW;        // we start, assuming no motion detected
-int buzzerPin = 2;
 
 RTC_DS3231 rtc;
 
 #define REDPIN 10 // RGB Strip pins
 #define GREENPIN 11
 #define BLUEPIN 9
-int r_in = 100, g_in = 100, b_in = 100;
+int r_in, g_in, b_in; // RGB color define
 bool done = false;
 
 long previousMillis_1 = 0; // will store last time status was updated
@@ -70,9 +69,9 @@ int period = 5000;
 
 float h = -1, t2 = -1, a = -1, d = -1, t1 = -1;
 int r = -1, p = -1;
-int flag = 1;
+int flag = 1; // update display
 bool blt = false;
-char ch_data[4];
+char ch_data[4]; // store incoming date from BLT
 
 // temperature correction after 10 min work, because of self heating !
 bool correction_t = true;
@@ -84,7 +83,7 @@ float delta_t2 = 0;
 void setup() {
 
   // UART speed
-  Serial.begin(9600);
+  //Serial.begin(9600);
   SerialBLE.begin(9600);
 
   // actions with display
@@ -116,8 +115,6 @@ void setup() {
   digitalWrite(relayPin , LOW);    // turn OFF relay !!!
   pinMode(pirInputPin, INPUT);      // declare rip-sensor as input
   digitalWrite(pirInputPin , LOW);
-  pinMode(buzzerPin, OUTPUT);
-  digitalWrite(buzzerPin , LOW);
   pinMode(BlueLedPin, OUTPUT); // Blue Led
   digitalWrite(BlueLedPin, HIGH);
   pinMode(GreenLedPin, OUTPUT); // green led
@@ -346,8 +343,6 @@ void PIR(int val) {
     if (pir == LOW) {
       //Serial.println("Motion detected!");
       pir = HIGH;
-      tone(buzzerPin, 3830, 500); // tone(pin, frequency, duration), TODO?!
-      // https://github.com/bhagman/Tone
     }
   } else {
     if (pir == HIGH) {
@@ -380,5 +375,5 @@ void RGBStrip(int r, int g, int b) {
   analogWrite(REDPIN , r);
   analogWrite(GREENPIN , g);
   analogWrite(BLUEPIN , b);
-  Serial.println("RGB: " + (String)r + "." + (String)g + "." + (String)b);
+  //Serial.println("RGB: " + (String)r + "." + (String)g + "." + (String)b);
 }

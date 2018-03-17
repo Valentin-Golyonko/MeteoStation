@@ -76,8 +76,8 @@ public class RGBLightSelect extends Fragment {
 
         // TODO: add to setings: selector - "add color index/code"
         TextView textView = getActivity().findViewById(R.id.colorPickerTv);
-        //String rgbColorHtml = mColorPickerView.getColorHtml();
-        //textView.setText("#" + rgbColorHtml);
+        String rgbColorHtml = mColorPickerView.getColorHtml();
+        textView.setText("#" + rgbColorHtml);
 
         // TODO: better color representation
         llColorPicker.setBackgroundColor(color);
@@ -100,21 +100,14 @@ public class RGBLightSelect extends Fragment {
             try {
                 OutputStream outputStream = BluetoothService.getmSocket().getOutputStream();
 
-                // turn on rgb strip
-                byte[] bytes_1 = ByteBuffer.allocate(4).putInt(3002).array();
-                //Log.d(TAG, "rgb strip on");
-                for (byte b : bytes_1) {
-                    outputStream.write(b);
-                }
-
                 int[] value = new int[3];
                 value[0] = 10000 + color[0];
                 value[1] = 11000 + color[1];
                 value[2] = 13000 + color[2];
-                //Log.d(TAG, Arrays.toString(value));
+                Log.d(TAG, Arrays.toString(value));
 
                 // set rgb strip color
-                for (int i = 0; i < 3; i++) {   // for(int i : value) don't work
+                for (int i = 0; i < 3; i++) {
                     byte[] bytes_2 = ByteBuffer.allocate(4).putInt(value[i]).array();
                     //Log.d(TAG, Arrays.toString(bytes_2));
 

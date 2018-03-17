@@ -295,6 +295,7 @@ public class BluetoothFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 changeRgbLight();
+                Periphery.periphery(2, true);
             }
         });
 
