@@ -7,6 +7,10 @@ The application reads data over bluetooth from a home weather station built on a
 <p>All components before soldering:</p>
 <img src="https://github.com/Valentin-Golyonko/MeteoStation/blob/master/meteo_station/before_soldering.jpg" alt="befor_soldering">
 
+<p>Assembled</p>
+<img src="https://github.com/Valentin-Golyonko/MeteoStation/blob/master/meteo_station/weather_station_front.jpg" alt="befor_soldering">
+<img src="https://github.com/Valentin-Golyonko/MeteoStation/blob/master/meteo_station/weather_station_back.jpg" alt="befor_soldering">
+
 <p>The project uses the following components:</p>
 <p>&nbsp&nbsp  Arduino Nano v3, 2.90$</p>
 <p>&nbsp&nbsp  DHT-22 - digital temperature and humidity sensor, 2.52$</p>

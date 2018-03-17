@@ -1,19 +1,3 @@
-// project done for Arduino Nano v3 by Valentin Golyonko (Valentin8Dev@gmail.com)
-// with using:
-//  Arduino Nano v3 - 2.90$
-//  DHT-22 - digital temperature and humidity sensor - 2.52$
-//  MQ-135 - air quality and hazardous gas detection sensor - 0.80$
-//  128x64 OLED LCD 0.96" (i2c) - 2.33$
-//  BMP280 - digital barometric pressure altitude sensor (i2c) - 0.81$
-//  DS3231 AT24C32 - clock memory module (i2c) - 0.89$
-//  1-channel 5V relay - 0.52$
-//  RGB LED Strip 5050 DC12V 5m - 7.81$ 5m
-//  HC-06 Bluetooth (v2.0)- 2.78$
-//  HC-SR501 - infrared PIR motion sensor - 0.80$
-//  PCB 5x7cm double-side - 0.30$
-//
-//    summary = 22.84$ (or 15.03 without Led Strip)
-//
 // hint! => delete Serial.begin(9600) and connected declarations after debugging
 //          to reduce dynamic memory by 193 bytes (9%)
 //
@@ -100,7 +84,7 @@ float delta_t2 = 0;
 void setup() {
 
   // UART speed
-  //Serial.begin(9600);
+  Serial.begin(9600);
   SerialBLE.begin(9600);
 
   // actions with display
@@ -132,9 +116,6 @@ void setup() {
   digitalWrite(relayPin , LOW);    // turn OFF relay !!!
   pinMode(pirInputPin, INPUT);      // declare rip-sensor as input
   digitalWrite(pirInputPin , LOW);
-  pinMode(REDPIN, OUTPUT);
-  pinMode(GREENPIN, OUTPUT);
-  pinMode(BLUEPIN, OUTPUT);
   pinMode(buzzerPin, OUTPUT);
   digitalWrite(buzzerPin , LOW);
   pinMode(BlueLedPin, OUTPUT); // Blue Led
@@ -242,10 +223,10 @@ void ListenBlt() {
       // i use only 2 bytes (2^16-1), ex-pl:  0010 0011 1101 1100  = 9180 (int)
       if (count == 4) {
         // convert byte to int ;  may be:  int i = atoi(intBuffer) ?
-        int a = (int)(unsigned char)(ch_data[0]) << 24 |
-                (unsigned char)(ch_data[1]) << 16 |
-                (unsigned char)(ch_data[2]) << 8 |
-                (unsigned char)(ch_data[3]);
+        int a = (long)(unsigned char)(ch_data[0]) << 24 |
+                (long)(unsigned char)(ch_data[1]) << 16 |
+                (int)(unsigned char)(ch_data[2]) << 8 |
+                (int)(unsigned char)(ch_data[3]);
 
         //        Serial.println(a, DEC);
         GetCommand(a);
@@ -361,7 +342,7 @@ void Transmit(float t1, float t2, float h, float a, float d, int p, int r) {
 void PIR(int val) {
   if (val == HIGH) {  // check if the input is HIGH
     digitalWrite(relayPin, HIGH);  // turn LED ON
-    RGBStrip(250, 30, 30); // Color = Red
+    RGBStrip(100, 100, 100); // Color = Red
     if (pir == LOW) {
       //Serial.println("Motion detected!");
       pir = HIGH;
@@ -399,5 +380,5 @@ void RGBStrip(int r, int g, int b) {
   analogWrite(REDPIN , r);
   analogWrite(GREENPIN , g);
   analogWrite(BLUEPIN , b);
-  //  Serial.println("RGB: " + (String)r + "." + (String)g + "." + (String)b);
+  Serial.println("RGB: " + (String)r + "." + (String)g + "." + (String)b);
 }
