@@ -16,6 +16,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,15 +27,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 /**
@@ -51,6 +45,9 @@ public class BluetoothFragment extends Fragment {
     static boolean CONNECTED = false;   // 'flag' to start painting (from app or widget)
     static String meteoStationMAC = null;
     private final int SPEECH_RECOGNITION_CODE = 4;
+    private CardView cv_t1;
+    private CardView cv_t2;
+    private CardView cv_h;
     private StringBuilder sb = new StringBuilder();
     private TextView voiceToTxtOutput;
     private ImageButton btnMicrophone;
@@ -65,7 +62,7 @@ public class BluetoothFragment extends Fragment {
     private TextView tvPir;
     private ProgressBar pBar;
     private boolean running = false;    // alarm dialog on/off  TODO: do i need it ?
-    private LineChart chart;
+    private int active_chart = 1;   // 1 = temperature_1
 
     // The Handler that gets information back from the BluetoothService
     // TODO: HandlerLeak ???
@@ -106,13 +103,14 @@ public class BluetoothFragment extends Fragment {
                     if (endOfLineIndex > 0) {
                         String sbPrint = sb.substring(0, endOfLineIndex);
                         sb.delete(0, sb.length());
+                        sb.trimToSize();
 
                         InputRecognition.inputSymbols(sbPrint); // resolve input string to data (int)
                         updateUI();                             // and than update layout
                     }
                     if (sb.length() > 64) {
                         sb.delete(0, sb.length());
-                        //Log.w(TAG, "sb too large");
+                        Log.w(TAG, "sb too large");
                     }
                     break;
                 case Constants.MESSAGE_DEVICE_NAME:
@@ -200,6 +198,8 @@ public class BluetoothFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
+        updateUI();
+
         // Performing this check in onResume() covers the case in which BT was
         // not enabled during onStart(), so we were paused to enable it...
         // onResume() will be called when ACTION_REQUEST_ENABLE activity returns.
@@ -245,7 +245,7 @@ public class BluetoothFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        View rootBF = inflater.inflate(R.layout.fragment_bluetooth, container, false);
+        View rootBF = inflater.inflate(R.layout.test_main, container, false);  // fragment_bluetooth / test_main
 
         switch_blt = rootBF.findViewById(R.id.switch_blt);
         voiceToTxtOutput = rootBF.findViewById(R.id.voice_to_text_output);
@@ -259,7 +259,15 @@ public class BluetoothFragment extends Fragment {
         btnRgbLight = rootBF.findViewById(R.id.btn_rgbLight);
         switch_rgbLight = rootBF.findViewById(R.id.switch_rgbLight);
         pBar = rootBF.findViewById(R.id.pb_main_fragment);
-        chart = rootBF.findViewById(R.id.chart_bf);
+
+        FragmentManager chart_fm = getActivity().getSupportFragmentManager();
+        FragmentTransaction chart_ft = chart_fm.beginTransaction();
+        chart_ft.replace(R.id.fragment_for_line_chart, new LineChartForBF())
+                .commit();
+
+        cv_t1 = rootBF.findViewById(R.id.cardView_t1);
+        cv_t2 = rootBF.findViewById(R.id.cardView_t2);
+        cv_h = rootBF.findViewById(R.id.cardView_h);
 
         updateUI();
 
@@ -303,6 +311,41 @@ public class BluetoothFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Periphery.periphery(2, switch_rgbLight.isChecked());
+            }
+        });
+
+        cv_t1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (InputRecognition.getSizeT1() > 0) {
+                    //LineChartForBF.graphicBF_t1();
+                    LineChartForBF.graphics(1);
+                    active_chart = 1;
+                }
+            }
+        });
+
+        cv_t2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (InputRecognition.getSizeT2() > 0) {
+                    //LineChartForBF.graphicBF_t2();
+                    LineChartForBF.graphics(4);
+                    active_chart = 4;
+                    //updateUI();
+                }
+            }
+        });
+
+        cv_h.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (InputRecognition.getSizeH() > 0) {
+                    //LineChartForBF.graphicBF_h();
+                    LineChartForBF.graphics(2);
+                    active_chart = 2;
+                    //updateUI();
+                }
             }
         });
     }
@@ -379,9 +422,28 @@ public class BluetoothFragment extends Fragment {
 
     private void updateUI() {
 
-        tvTemp.setText(String.format("%s °C", InputRecognition.tempr));
+        //tvTemp.setText(String.format("%s °C", InputRecognition.tempr));
+        int t1Size = InputRecognition.getSizeT1();
+        if (t1Size > 0) {
+            float t1 = InputRecognition.getArrayT1().get(t1Size - 1);
+            tvTemp.setText(String.format("%s °C", t1));
+            if (active_chart == 1) {
+                //LineChartForBF.graphicBF_t1();
+                LineChartForBF.graphics(1);
+            }
+            // with this implementation i do't have '-1' value from InputRecognition
+        }
 
-        tvHum.setText(MessageFormat.format("{0} %", InputRecognition.humid));
+        //tvHum.setText(MessageFormat.format("{0} %", InputRecognition.humid));
+        int hSize = InputRecognition.getSizeH();
+        if (hSize > 0) {
+            float h = InputRecognition.getArrayH().get(hSize - 1);
+            tvHum.setText(MessageFormat.format("{0} %", h));
+            if (active_chart == 2) {
+                //LineChartForBF.graphicBF_h();
+                LineChartForBF.graphics(2);
+            }
+        }
 
         tvAirq.setText(String.format("%s AirQ", InputRecognition.air));
 
@@ -410,39 +472,14 @@ public class BluetoothFragment extends Fragment {
 
         tvPressure.setText(String.format("%s mm.rs", InputRecognition.pressure));
 
-        int t2Size = InputRecognition.getT2Size();
+        int t2Size = InputRecognition.getSizeT2();
         if (t2Size > 0) {
-            float t2 = InputRecognition.getT2Array().get(t2Size - 1);
+            float t2 = InputRecognition.getArrayT2().get(t2Size - 1);
             tvTempr2.setText(String.format("%s °C", t2));
-            graphicBF();
+            if (active_chart == 4) {
+                //LineChartForBF.graphicBF_t2();
+                LineChartForBF.graphics(4);
+            }
         }
-    }
-
-    // TODO: add on item (meteo parameter) click listener -> change graphic type
-    //      (inside one view element == <com.github.mikephil.charting.charts.LineChart>)
-    private void graphicBF() {
-
-        int size = InputRecognition.getT2Size();
-
-        List<Entry> entries = new ArrayList<>();
-
-        for (int i = 0; i < size; i++) {
-            entries.add(new Entry(InputRecognition.fA.get(i), InputRecognition.getT2Array().get(i)));
-
-            XAxis xAxis = chart.getXAxis(); // TODO: .NullPointerException when the screen rotates
-            xAxis.setValueFormatter(new MyXAxisValueFormatter(InputRecognition.valuesA));
-        }
-
-        LineDataSet dataSet = new LineDataSet(entries, "Temperature");
-        dataSet.setColor(Color.BLACK);
-        dataSet.setValueTextColor(Color.BLACK);
-        dataSet.setDrawValues(false);
-
-        LineData lineData = new LineData(dataSet);
-        chart.setData(lineData);
-
-        chart.setVisibleXRangeMaximum(20); // allow 20 values to be displayed at once on the x-axis, not more
-        chart.moveViewToX(size - 1); // Moves the left side (edge) of the current viewport to the specified x-value.
-        //chart.invalidate();
     }
 }

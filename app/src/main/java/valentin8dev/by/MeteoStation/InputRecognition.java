@@ -12,17 +12,20 @@ class InputRecognition {
 
     static String tempr = "--", humid = "--", air = "--", tempr2 = "--",
             pirSensor = "--", pressure = "--", rgbLight = "--";
-
-    // TODO: move to dif-t class, using Android Architecture Components
-    static ArrayList<Float> fA = new ArrayList<>(); // fake array
-    static ArrayList<String> valuesA = new ArrayList<>();   // array for current time
-
     private static int t = -1, z = -1, h = -1, y = -1, a = -1, x = -1, j = -1, q = -1,
             l = -1, w = -1, p = -1, u = -1, d = -1, s = -1;
     private static boolean date_came = false;
-    private static float ii = 0;
-    private static ArrayList<Float> t2Array = new ArrayList<>();
-    private static int t2Size;
+
+    // TODO: move to dif-t class, using Android Architecture Components
+    static ArrayList<String> times_for_t2 = new ArrayList<>();   // array for current time
+    static ArrayList<String> times_for_t1 = new ArrayList<>();   // array for current time
+    static ArrayList<String> times_for_h = new ArrayList<>();   // array for current time
+    private static ArrayList<Float> arrayT2 = new ArrayList<>();
+    private static ArrayList<Float> arrayT1 = new ArrayList<>();
+    private static ArrayList<Float> arrayH = new ArrayList<>();
+    private static int sizeT2;
+    private static int sizeT1;
+    private static int sizeH;
 
     /**
      * resolve input string 'in' to data (int) and parse it to the Activity (view elements)
@@ -61,17 +64,21 @@ class InputRecognition {
                 }
             }
 
-            tempr = parameter(input, t, z);
+            parameter_new(input, t, z, arrayT1, times_for_t1);
+            setSizeT1(arrayT1.size());
+            //tempr = parameter(input, t, z);
             t = z = -1;
 
-            humid = parameter(input, h, y);
+            parameter_new(input, h, y, arrayH, times_for_h);
+            setSizeH(arrayH.size());
+            //humid = parameter(input, h, y);
             h = y = -1;
 
             air = parameter(input, a, x);
             a = x = -1;
 
-            parameter_new(input, j, q, t2Array);
-            setT2Size(t2Array.size());
+            parameter_new(input, j, q, arrayT2, times_for_t2);
+            setSizeT2(arrayT2.size());
             j = q = -1;
 
             rgbLight = parameter(input, l, w);
@@ -93,30 +100,36 @@ class InputRecognition {
     }
 
     /** Method build string from input values, convert them to float and store in array */
-    // NEW version, need to implement to all elements.
-    private static void parameter_new(String in, int from, int to, ArrayList<Float> arrayList) {
+    private static void parameter_new(String in, int from, int to, ArrayList<Float> arrayList, ArrayList<String> time_value) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(in);
+
+        // TODO: history !?
+        if (arrayList.size() == 20) {
+            arrayList.clear();
+            time_value.clear();
+        }
 
         if (from != -1 && to != -1) {
             int stringSize = to - from;
             if (stringSize > 0) { // protection from outOfBoundEx-n
                 String param = stringBuilder.substring(from, to);
-                //Log.d(TAG, "param " + param);
+                Log.d(TAG, "param " + param);
 
                 if (param != null && !param.equals(" NAN")) {
-                    arrayList.add(Float.parseFloat(param)); // TODO: don't know why, but it works!
-                    //Log.d(TAG, "arrayList " + arrayList.toString());
+                    arrayList.add(Float.parseFloat(param));
+                    Log.d(TAG, arrayList.size() + " arrayList " + arrayList.toString());
                 }
 
                 DateFormat dateFormat = DateFormat.getTimeInstance(DateFormat.SHORT);
                 Date dateTime = new Date();
                 String time = dateFormat.format(dateTime);
 
-                fA.add(ii++);
-                valuesA.add(time);
+                time_value.add(time);
+                Log.d(TAG, time_value.size() + " time_value " + time_value.toString());
             }
         }
+        // don't know why, but it works!
     }
 
     // Old version
@@ -137,25 +150,49 @@ class InputRecognition {
         return "-1";
     }
 
-    static ArrayList<Float> getT2Array() {
-        return t2Array;
+    static ArrayList<Float> getArrayT2() {
+        return arrayT2;
     }
 
-    static int getT2Size() {
-        return t2Size;
+    static ArrayList<Float> getArrayT1() {
+        return arrayT1;
     }
 
-    private static void setT2Size(int t2Size) {
-        InputRecognition.t2Size = t2Size;
+    static int getSizeT2() {
+        return sizeT2;
     }
 
-    static boolean isDate_came() {
-        //Log.d(TAG, "date_came " + date_came);
-        return date_came;
+    private static void setSizeT2(int sizeT2) {
+        InputRecognition.sizeT2 = sizeT2;
+    }
+
+    private static void setSizeT1(int sizeT1) {
+        InputRecognition.sizeT1 = sizeT1;
+    }
+
+    static ArrayList<Float> getArrayH() {
+        return arrayH;
+    }
+
+    static int getSizeT1() {
+        return sizeT1;
+    }
+
+    static int getSizeH() {
+        return sizeH;
+    }
+
+    private static void setSizeH(int sizeH) {
+        InputRecognition.sizeH = sizeH;
     }
 
     static void setDate_came(boolean date_came) {
         InputRecognition.date_came = date_came;
         //Log.d(TAG, "date_came " + date_came);
+    }
+
+    static boolean isDate_came() {
+        //Log.d(TAG, "date_came " + date_came);
+        return date_came;
     }
 }

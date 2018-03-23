@@ -33,7 +33,7 @@ public class Graphics extends Fragment {
         chart.setScaleEnabled(true);
         chart.setDragEnabled(true);
 
-        if (InputRecognition.getT2Size() != 0) {
+        if (InputRecognition.getSizeT2() != 0) {
             graphicGF();
         }
 
@@ -42,16 +42,16 @@ public class Graphics extends Fragment {
 
     static void graphicGF() {
 
-        int size = InputRecognition.getT2Size();
-
+        int size = InputRecognition.getSizeT2();
+        ArrayList<Float> fa = new ArrayList<>();
         List<Entry> entries = new ArrayList<>();
 
         for (int i = 0; i < size; i++) {
-
-            entries.add(new Entry(InputRecognition.fA.get(i), InputRecognition.getT2Array().get(i)));
+            fa.add(i, (float)i);
+            entries.add(new Entry(fa.get(i), InputRecognition.getArrayT2().get(i)));
 
             XAxis xAxis = chart.getXAxis(); // TODO: .NullPointerException when the screen rotates
-            xAxis.setValueFormatter(new MyXAxisValueFormatter(InputRecognition.valuesA));
+            xAxis.setValueFormatter(new MyXAxisValueFormatter(InputRecognition.times_for_t2));
         }
 
         LineDataSet dataSet = new LineDataSet(entries, "Temperature");

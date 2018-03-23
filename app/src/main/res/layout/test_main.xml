@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:layout_editor_absoluteY="81dp">
+
+    <ProgressBar
+        android:id="@+id/pb_main_fragment"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:indeterminate="true"
+        android:progress="@android:integer/config_longAnimTime"
+        android:visibility="invisible"/>
+
+    <android.support.v7.widget.CardView
+        style="@style/my"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/pb_main_fragment"
+        android:layout_centerHorizontal="true"
+        card_view:cardCornerRadius="5dp"
+        card_view:cardElevation="3dp"
+        android:id="@+id/cardView_blt">
+
+        <Switch
+            android:layout_gravity="center_vertical"
+            android:id="@+id/switch_blt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:text="@string/sw_bluetooth"
+            android:textSize="18sp"/>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardView_t1"
+        style="@style/my"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/cardView_blt"
+        card_view:cardCornerRadius="5dp"
+        card_view:cardElevation="3dp">
+
+        <TextView
+            android:id="@+id/tv_temperature_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:text="@string/tv_temperature_1"
+            android:textAlignment="center"
+            android:textColor="@android:color/background_dark"
+            android:textSize="18sp"/>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardView_h"
+        style="@style/my"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/cardView_blt"
+        android:layout_centerHorizontal="true"
+        card_view:cardCornerRadius="5dp"
+        card_view:cardElevation="3dp">
+
+        <TextView
+            android:id="@+id/tv_humidity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:text="@string/tv_humidity"
+            android:textAlignment="center"
+            android:textColor="@android:color/background_dark"
+            android:textSize="18sp"/>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardView_a"
+        style="@style/my"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/cardView_blt"
+        card_view:cardCornerRadius="5dp"
+        card_view:cardElevation="3dp">
+
+        <TextView
+            android:id="@+id/tv_air"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:text="@string/tv_air"
+            android:textAlignment="center"
+            android:textColor="@android:color/background_dark"
+            android:textSize="18sp"/>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardView_t2"
+        style="@style/my"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/cardView_t1"
+        card_view:cardCornerRadius="5dp"
+        card_view:cardElevation="3dp">
+
+        <TextView
+            android:id="@+id/tv_temperature_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:text="@string/tv_temperature_2"
+            android:textAlignment="center"
+            android:textColor="@android:color/background_dark"
+            android:textSize="18sp"/>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardView_p"
+        style="@style/my"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/cardView_a"
+        android:layout_centerHorizontal="true"
+        card_view:cardCornerRadius="5dp"
+        card_view:cardElevation="3dp">
+
+        <TextView
+            android:id="@+id/tv_pressure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:text="@string/tv_pressure"
+            android:textAlignment="center"
+            android:textColor="@android:color/background_dark"
+            android:textSize="18sp"/>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardView_pir"
+        style="@style/my"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/cardView_a"
+        card_view:cardCornerRadius="5dp"
+        card_view:cardElevation="3dp">
+
+        <TextView
+            android:id="@+id/tv_pir"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:text="@string/pir_off"
+            android:textAlignment="center"
+            android:textColor="@android:color/background_dark"
+            android:textSize="18sp"/>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardView_rgb"
+        style="@style/my"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        card_view:cardCornerRadius="5dp"
+        card_view:cardElevation="3dp"
+        android:layout_below="@+id/cardView_p"
+        android:layout_centerHorizontal="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/btn_rgbLight"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="8dp"
+                android:background="#f1f1"/>
+
+            <Switch
+                android:layout_gravity="center_vertical"
+                android:id="@+id/switch_rgbLight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:text="@string/sw_rgb_light"
+                android:textSize="18sp"/>
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/btn_mic"
+        style="@style/my"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        card_view:srcCompat="@drawable/ic_mic_white_24dp"
+        android:layout_below="@+id/cardView_rgb"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:id="@+id/voice_to_text_output"
+        style="@style/my"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/btn_mic"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="9dp"
+        android:layout_toStartOf="@+id/btn_mic"
+        android:maxLines="2"
+        android:minWidth="100dp"
+        android:text="@string/tv_voice_output"
+        android:textAlignment="center"/>
+
+    <FrameLayout
+        android:id="@+id/fragment_for_line_chart"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/btn_mic"
+        android:layout_centerHorizontal="true"
+        tools:layout="@layout/bf_line_chart"/>
+
+</RelativeLayout>
