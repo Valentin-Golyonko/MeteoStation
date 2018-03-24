@@ -42,27 +42,28 @@ public class BluetoothFragment extends Fragment {
     private static final int REQUEST_ENABLE_BT = 3;
     static BluetoothAdapter mBluetoothAdapter = null;
     static BluetoothService mBluetoothService = null;
-    static boolean CONNECTED = false;   // 'flag' to start painting (from app or widget)
     static String meteoStationMAC = null;
     private final int SPEECH_RECOGNITION_CODE = 4;
     private CardView cv_t1;
     private CardView cv_t2;
     private CardView cv_h;
+    private CardView cv_a;
+    private CardView cv_p;
+    private CardView cv_pir;
     private StringBuilder sb = new StringBuilder();
-    private TextView voiceToTxtOutput;
-    private ImageButton btnMicrophone;
-    private Switch switch_blt;
-    private TextView tvTemp;
-    private TextView tvHum;
-    private TextView tvAirq;
-    private AppCompatButton btnRgbLight;
-    private Switch switch_rgbLight;
-    private TextView tvTempr2;
-    private TextView tvPressure;
-    private TextView tvPir;
-    private ProgressBar pBar;
-    private boolean running = false;    // alarm dialog on/off  TODO: do i need it ?
-    private int active_chart = 1;   // 1 = temperature_1
+    private TextView voiceToTxtOutput; // speech to text output
+    private ImageButton btnMicrophone; // google speech to text
+    private Switch switch_blt; // on/off bluetooth and select device to connect
+    private TextView tvTemp; // Temperature 1 from DHT-22
+    private TextView tvHum; // Humidity from DHT-22
+    private TextView tvAirq; // air quality from MQ-135
+    private AppCompatButton btnRgbLight; // select RGB color and on/off RGB strip
+    private Switch switch_rgbLight; // on/off RGB strip
+    private TextView tvTempr2; // Temperature 2 from BMP280
+    private TextView tvPressure; // Pressure from BMP280
+    private TextView tvPir; // infrared PIR motion sensor
+    private ProgressBar pBar; // bluetooth connection progress
+    private int active_chart = 1;   // t1 = 1, h = 2, a = 3, t2 = 4, p = 5
 
     // The Handler that gets information back from the BluetoothService
     // TODO: HandlerLeak ???
@@ -77,7 +78,6 @@ public class BluetoothFragment extends Fragment {
                         case BluetoothService.STATE_CONNECTED:
                             pBar.setVisibility(View.INVISIBLE);
                             pBar.animate().cancel();
-                            CONNECTED = true;
                             break;
                         case BluetoothService.STATE_CONNECTING:
                             pBar.setVisibility(View.VISIBLE);
@@ -135,15 +135,6 @@ public class BluetoothFragment extends Fragment {
             }
         }
     };
-
-    public static boolean isCONNECTED() {
-        return CONNECTED;
-    }
-
-    public static void setCONNECTED(boolean c) {
-        BluetoothFragment.CONNECTED = c;
-        //Log.d(TAG, "CONNECTED " + CONNECTED);
-    }
 
     /**
      * Establish connection with other device
@@ -209,14 +200,6 @@ public class BluetoothFragment extends Fragment {
                 // Start the Bluetooth services
                 mBluetoothService.start();
             }
-
-            /*if (meteoStationMAC != null) {
-                BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(meteoStationMAC);
-                // Attempt to connect to the device
-                if (mBluetoothService != null) {
-                    mBluetoothService.connect(device);
-                }
-            }*/
         }
 
         // set button color background
@@ -245,7 +228,7 @@ public class BluetoothFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        View rootBF = inflater.inflate(R.layout.test_main, container, false);  // fragment_bluetooth / test_main
+        View rootBF = inflater.inflate(R.layout.fragment_bluetooth, container, false);
 
         switch_blt = rootBF.findViewById(R.id.switch_blt);
         voiceToTxtOutput = rootBF.findViewById(R.id.voice_to_text_output);
@@ -268,8 +251,12 @@ public class BluetoothFragment extends Fragment {
         cv_t1 = rootBF.findViewById(R.id.cardView_t1);
         cv_t2 = rootBF.findViewById(R.id.cardView_t2);
         cv_h = rootBF.findViewById(R.id.cardView_h);
+        cv_a = rootBF.findViewById(R.id.cardView_a);
+        cv_p = rootBF.findViewById(R.id.cardView_p);
+        cv_pir = rootBF.findViewById(R.id.cardView_pir);
 
         updateUI();
+        cardViewsBackColor(active_chart);
 
         return rootBF;
     }
@@ -318,9 +305,9 @@ public class BluetoothFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (InputRecognition.getSizeT1() > 0) {
-                    //LineChartForBF.graphicBF_t1();
-                    LineChartForBF.graphics(1);
                     active_chart = 1;
+                    LineChartForBF.graphics(active_chart);
+                    cardViewsBackColor(active_chart);
                 }
             }
         });
@@ -329,10 +316,9 @@ public class BluetoothFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (InputRecognition.getSizeT2() > 0) {
-                    //LineChartForBF.graphicBF_t2();
-                    LineChartForBF.graphics(4);
                     active_chart = 4;
-                    //updateUI();
+                    LineChartForBF.graphics(active_chart);
+                    cardViewsBackColor(active_chart);
                 }
             }
         });
@@ -341,10 +327,31 @@ public class BluetoothFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (InputRecognition.getSizeH() > 0) {
-                    //LineChartForBF.graphicBF_h();
-                    LineChartForBF.graphics(2);
                     active_chart = 2;
-                    //updateUI();
+                    LineChartForBF.graphics(active_chart);
+                    cardViewsBackColor(active_chart);
+                }
+            }
+        });
+
+        cv_a.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (InputRecognition.getSizeA() > 0) {
+                    active_chart = 3;
+                    LineChartForBF.graphics(active_chart);
+                    cardViewsBackColor(active_chart);
+                }
+            }
+        });
+
+        cv_p.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (InputRecognition.getSizeP() > 0) {
+                    active_chart = 5;
+                    LineChartForBF.graphics(active_chart);
+                    cardViewsBackColor(active_chart);
                 }
             }
         });
@@ -366,10 +373,8 @@ public class BluetoothFragment extends Fragment {
                     // Bluetooth is now enabled, so set up a session
                     // Initialize the BluetoothService to perform bluetooth connections
                     mBluetoothService = new BluetoothService(getActivity(), mHandler);
-                    //Log.d(TAG, "BT enabled");
                 } else {
                     // User did not enable Bluetooth or an error occurred
-                    //Log.d(TAG, "BT not enabled");
                     Toast.makeText(getActivity(), R.string.bt_not_enabled_leaving,
                             Toast.LENGTH_SHORT).show();
                     getActivity().finish();
@@ -422,64 +427,108 @@ public class BluetoothFragment extends Fragment {
 
     private void updateUI() {
 
-        //tvTemp.setText(String.format("%s °C", InputRecognition.tempr));
         int t1Size = InputRecognition.getSizeT1();
         if (t1Size > 0) {
             float t1 = InputRecognition.getArrayT1().get(t1Size - 1);
             tvTemp.setText(String.format("%s °C", t1));
             if (active_chart == 1) {
-                //LineChartForBF.graphicBF_t1();
                 LineChartForBF.graphics(1);
             }
             // with this implementation i do't have '-1' value from InputRecognition
         }
 
-        //tvHum.setText(MessageFormat.format("{0} %", InputRecognition.humid));
         int hSize = InputRecognition.getSizeH();
         if (hSize > 0) {
             float h = InputRecognition.getArrayH().get(hSize - 1);
             tvHum.setText(MessageFormat.format("{0} %", h));
             if (active_chart == 2) {
-                //LineChartForBF.graphicBF_h();
                 LineChartForBF.graphics(2);
             }
         }
 
-        tvAirq.setText(String.format("%s AirQ", InputRecognition.air));
+        int aSize = InputRecognition.getSizeA();
+        if (aSize > 0) {
+            float a = InputRecognition.getArrayA().get(aSize - 1);
+            tvAirq.setText(String.format("%s AirQ", a));
+            if (active_chart == 3) {
+                LineChartForBF.graphics(3);
+            }
+        }
 
         String rgbLight = InputRecognition.rgbLight;
         if (rgbLight.equals("1")) {
             switch_rgbLight.setChecked(true);
-            //Log.d(TAG, "RGBlight is On");
         } else {
             switch_rgbLight.setChecked(false);
-            //Log.d(TAG, "RGBlight is Off");
         }
 
         String pirSensor = InputRecognition.pirSensor;
         if (pirSensor.equals("1")) {
-            //Log.d(TAG, "PIRSensor is On");
             tvPir.setText(R.string.pir_on);
             tvPir.setTextColor(Color.RED);
-            tvPir.setBackgroundColor(Color.YELLOW);
+            cv_pir.setCardBackgroundColor(Color.YELLOW);
         } else {
-            running = false;
-            //Log.d(TAG, "PIRSensor is Off");
             tvPir.setText(R.string.pir_off);
             tvPir.setTextColor(Color.BLACK);
-            tvPir.setBackgroundColor(Color.WHITE);
+            cv_pir.setCardBackgroundColor(Color.WHITE);
         }
 
-        tvPressure.setText(String.format("%s mm.rs", InputRecognition.pressure));
+        int pSize = InputRecognition.getSizeP();
+        if (pSize > 0) {
+            float p = InputRecognition.getArrayP().get(pSize - 1);
+            tvPressure.setText(String.format("%s mm.rs", p));
+            if (active_chart == 5) {
+                LineChartForBF.graphics(5);
+            }
+        }
 
         int t2Size = InputRecognition.getSizeT2();
         if (t2Size > 0) {
             float t2 = InputRecognition.getArrayT2().get(t2Size - 1);
             tvTempr2.setText(String.format("%s °C", t2));
             if (active_chart == 4) {
-                //LineChartForBF.graphicBF_t2();
                 LineChartForBF.graphics(4);
             }
+        }
+    }
+
+    private void cardViewsBackColor(int chart) {
+        switch (chart) {
+            case 1:
+                cv_t1.setCardBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                cv_h.setCardBackgroundColor(Color.WHITE);
+                cv_a.setCardBackgroundColor(Color.WHITE);
+                cv_t2.setCardBackgroundColor(Color.WHITE);
+                cv_p.setCardBackgroundColor(Color.WHITE);
+                break;
+            case 2:
+                cv_t1.setCardBackgroundColor(Color.WHITE);
+                cv_h.setCardBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                cv_a.setCardBackgroundColor(Color.WHITE);
+                cv_t2.setCardBackgroundColor(Color.WHITE);
+                cv_p.setCardBackgroundColor(Color.WHITE);
+                break;
+            case 3:
+                cv_t1.setCardBackgroundColor(Color.WHITE);
+                cv_h.setCardBackgroundColor(Color.WHITE);
+                cv_a.setCardBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                cv_t2.setCardBackgroundColor(Color.WHITE);
+                cv_p.setCardBackgroundColor(Color.WHITE);
+                break;
+            case 4:
+                cv_t1.setCardBackgroundColor(Color.WHITE);
+                cv_h.setCardBackgroundColor(Color.WHITE);
+                cv_a.setCardBackgroundColor(Color.WHITE);
+                cv_t2.setCardBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                cv_p.setCardBackgroundColor(Color.WHITE);
+                break;
+            case 5:
+                cv_t1.setCardBackgroundColor(Color.WHITE);
+                cv_h.setCardBackgroundColor(Color.WHITE);
+                cv_a.setCardBackgroundColor(Color.WHITE);
+                cv_t2.setCardBackgroundColor(Color.WHITE);
+                cv_p.setCardBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                break;
         }
     }
 }

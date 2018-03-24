@@ -31,27 +31,35 @@ public class LineChartForBF extends Fragment {
         String legend = "";
 
         switch (id) {
-            case 1: // t1
+            case 1: // Temperature 1 from DHT-22
                 floats = InputRecognition.getArrayT1();
                 size = InputRecognition.getSizeT1();
                 strings = InputRecognition.times_for_t1;
-                legend = "t1";
+                legend = "Temperature 1";
                 break;
-            case 2: // h
+            case 2: // Humidity from DHT-22
                 floats = InputRecognition.getArrayH();
                 size = InputRecognition.getSizeH();
                 strings = InputRecognition.times_for_h;
-                legend = "h";
+                legend = "Humidity";
                 break;
-            case 3: // air
+            case 3: // air quality from MQ-135
+                floats = InputRecognition.getArrayA();
+                size = InputRecognition.getSizeA();
+                strings = InputRecognition.times_for_a;
+                legend = "Air";
                 break;
-            case 4: // t2
+            case 4: // Temperature 2 from BMP280
                 floats = InputRecognition.getArrayT2();
                 size = InputRecognition.getSizeT2();
                 strings = InputRecognition.times_for_t2;
-                legend = "t2";
+                legend = "Temperature 2";
                 break;
-            case 5: // p
+            case 5: // Pressure from BMP280
+                floats = InputRecognition.getArrayP();
+                size = InputRecognition.getSizeP();
+                strings = InputRecognition.times_for_p;
+                legend = "Pressure";
                 break;
         }
 
@@ -74,7 +82,7 @@ public class LineChartForBF extends Fragment {
         Log.d(TAG, "f_s " + fa.size() + " s " + size + " t " + strings.size());
 
         LineData lineData = new LineData(dataSet);
-        chart.setData(lineData);
+        chart.setData(lineData); // TODO: .IndexOutOfBoundsException: Invalid index 10, size is 10
         // allow 20 values to be displayed at once on the x-axis, not more
         chart.setVisibleXRangeMaximum(20);
         // Moves the left side (edge) of the current viewport to the specified x-value.

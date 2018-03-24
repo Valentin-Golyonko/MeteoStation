@@ -7,8 +7,7 @@ android {
         applicationId "valentin8dev.by.MeteoStation"
         minSdkVersion 19
         targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
+        versionName '1.1'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -35,9 +34,9 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
     // Architecture Components
     // https://developer.android.com/topic/libraries/architecture/guide.html
-    implementation 'android.arch.lifecycle:runtime:1.1.0'
-    annotationProcessor "android.arch.lifecycle:compiler:1.1.0"
-    implementation 'android.arch.lifecycle:extensions:1.1.0'
+    implementation 'android.arch.lifecycle:runtime:1.1.1'
+    annotationProcessor "android.arch.lifecycle:compiler:1.1.1"
+    implementation 'android.arch.lifecycle:extensions:1.1.1'
     implementation 'android.arch.persistence.room:runtime:1.0.0'
     annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
 }

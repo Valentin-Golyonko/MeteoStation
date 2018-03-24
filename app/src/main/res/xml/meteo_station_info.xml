@@ -4,7 +4,7 @@
     android:initialKeyguardLayout="@layout/meteo_station"
     android:initialLayout="@layout/meteo_station"
     android:minHeight="110dp"
-    android:minWidth="110dp"
+    android:minWidth="180dp"
     android:previewImage="@drawable/example_appwidget_preview"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="1800000"
