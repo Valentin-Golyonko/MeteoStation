@@ -79,10 +79,8 @@ public class LineChartForBF extends Fragment {
         dataSet.setValueTextColor(Color.BLACK);
         dataSet.setDrawValues(false);
 
-        Log.d(TAG, "f_s " + fa.size() + " s " + size + " t " + strings.size());
-
         LineData lineData = new LineData(dataSet);
-        chart.setData(lineData); // TODO: .IndexOutOfBoundsException: Invalid index 10, size is 10
+        chart.setData(lineData);
         // allow 20 values to be displayed at once on the x-axis, not more
         chart.setVisibleXRangeMaximum(20);
         // Moves the left side (edge) of the current viewport to the specified x-value.
