@@ -95,6 +95,11 @@ class InputRecognition {
             parameter_new(input, d, s, arrayP, times_for_p);
             setSizeP(arrayP.size());
             d = s = -1;
+
+            if (MyWidget.isWidgetOn()) {
+                BluetoothFragment.mBluetoothService.stop();
+                MyWidget.setWidgetOn(false);
+            }
         }
         setDate_came(false);
     }
@@ -220,7 +225,7 @@ class InputRecognition {
         InputRecognition.date_came = date_came;
     }
 
-    public static boolean isDate_came() {
+    static boolean isDate_came() {
         return date_came;
     }
 }

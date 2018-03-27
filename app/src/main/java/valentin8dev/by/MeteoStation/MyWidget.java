@@ -15,6 +15,8 @@ import static valentin8dev.by.MeteoStation.BluetoothFragment.meteoStationMAC;
 
 public class MyWidget extends AppWidgetProvider {
 
+    private static boolean widgetOn = false;
+
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
 
@@ -49,6 +51,14 @@ public class MyWidget extends AppWidgetProvider {
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 
+    public static boolean isWidgetOn() {
+        return widgetOn;
+    }
+
+    public static void setWidgetOn(boolean widgetOn) {
+        MyWidget.widgetOn = widgetOn;
+    }
+
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
@@ -58,12 +68,11 @@ public class MyWidget extends AppWidgetProvider {
                 BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(meteoStationMAC);
                 // Attempt to connect to the device
                 if (mBluetoothService != null) {
+                    setWidgetOn(true);
                     BluetoothFragment.mBluetoothService.connect(device);
-                    //Log.d("widget ", "connect");
+                    //Log.d("widget ", "connect " + device);
                     updateAppWidget(context, appWidgetManager, appWidgetId);
                     //Log.d("widget ", "update");
-                    BluetoothFragment.mBluetoothService.stop();
-                    //Log.d("widget ", "stop");
                 }
             }
         }
@@ -82,4 +91,3 @@ public class MyWidget extends AppWidgetProvider {
         }
     }
 }
-
