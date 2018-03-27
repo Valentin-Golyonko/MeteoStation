@@ -4,6 +4,7 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 import java.text.MessageFormat;
@@ -58,10 +59,11 @@ public class MyWidget extends AppWidgetProvider {
                 // Attempt to connect to the device
                 if (mBluetoothService != null) {
                     BluetoothFragment.mBluetoothService.connect(device);
-
+                    //Log.d("widget ", "connect");
                     updateAppWidget(context, appWidgetManager, appWidgetId);
-
+                    //Log.d("widget ", "update");
                     BluetoothFragment.mBluetoothService.stop();
+                    //Log.d("widget ", "stop");
                 }
             }
         }

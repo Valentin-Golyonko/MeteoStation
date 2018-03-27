@@ -31,7 +31,7 @@ class BluetoothService {
     // Debugging
     private static final String TAG = "BluetoothService";
     // Name for the SDP record when creating server socket
-    private static final String NAME_SECURE = "BluetoothChatSecure";
+    private static final String NAME_SECURE = "BluetoothSecure";
     // Unique UUID for this application
     private static final UUID MY_UUID_SECURE =
             UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
