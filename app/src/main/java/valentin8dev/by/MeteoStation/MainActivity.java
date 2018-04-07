@@ -5,16 +5,12 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "MainActivity";
-
-    static boolean oGraphicsMenu = false;
-    private static int bfId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +23,7 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             FragmentTransaction ftBF = getSupportFragmentManager().beginTransaction();
             BluetoothFragment bf = new BluetoothFragment();
-            bfId = bf.getId();
-            ftBF.add(R.id.fragment_main, bf, String.valueOf(bfId))
+            ftBF.add(R.id.fragment_main, bf, TAG)
                     .commit();
         }
 
@@ -78,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fmG = this.getSupportFragmentManager();
         FragmentTransaction ftG = fmG.beginTransaction();
         ftG.replace(R.id.fragment_main, new Graphics(), "Graphics")
-                .addToBackStack(null)
+                .addToBackStack(TAG)
                 .commit();
     }
 
@@ -86,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fmA = this.getSupportFragmentManager();
         FragmentTransaction ftA = fmA.beginTransaction();
         ftA.replace(R.id.fragment_main, new AboutMenu(), "AboutMenu")
-                .addToBackStack(null)
+                .addToBackStack(TAG)
                 .commit();
     }
 }

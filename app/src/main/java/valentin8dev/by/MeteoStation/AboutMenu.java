@@ -1,6 +1,7 @@
 package valentin8dev.by.MeteoStation;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.text.util.Linkify;
 import android.view.LayoutInflater;
@@ -13,7 +14,7 @@ public class AboutMenu extends Fragment {
     private static final String TAG = "AboutMenu";
 
     @Override
-    public View onCreateView(LayoutInflater inflater,
+    public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View rootAbout = inflater.inflate(R.layout.about_menu, container, false);
 

@@ -45,4 +45,5 @@
     <string name="github_page">My github page: \n https://github.com/Valentin-Golyonko</string>
     <string name="alarm">ALARM</string>
     <string name="tv_widget_name">Home weather station</string>
+    <string name="color_code">#123456</string>
 </resources>

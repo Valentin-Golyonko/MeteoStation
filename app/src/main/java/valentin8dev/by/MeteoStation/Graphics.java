@@ -2,6 +2,7 @@ package valentin8dev.by.MeteoStation;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -24,7 +25,7 @@ public class Graphics extends Fragment {
     private final String TAG = "GraphicsFragment";
 
     @Override
-    public View onCreateView(LayoutInflater inflater,
+    public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View rootGraphics = inflater.inflate(R.layout.graphics, container, false);
 

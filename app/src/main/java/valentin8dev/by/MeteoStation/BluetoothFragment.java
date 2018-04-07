@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.speech.RecognizerIntent;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -30,6 +31,7 @@ import android.widget.Toast;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Objects;
 
 /**
  * This fragment controls Bluetooth to communicate with your Meteo Station
@@ -141,7 +143,7 @@ public class BluetoothFragment extends Fragment {
      */
     public static void connectDevice(Intent data) {
         // Get the device MAC address
-        String address = data.getExtras()
+        String address = Objects.requireNonNull(data.getExtras())
                 .getString(DeviceListActivity.EXTRA_DEVICE_ADDRESS);
         // Get the BluetoothDevice object
         if (address != null) {
@@ -166,7 +168,9 @@ public class BluetoothFragment extends Fragment {
         if (mBluetoothAdapter == null) {
             FragmentActivity activity = getActivity();
             Toast.makeText(activity, "Bluetooth is not available", Toast.LENGTH_LONG).show();
-            activity.finish();
+            if (activity != null) {
+                activity.finish();
+            }
         }
     }
 
@@ -181,7 +185,7 @@ public class BluetoothFragment extends Fragment {
             // Otherwise, setup the chat session
         } else if (mBluetoothService == null) {
             // Initialize the BluetoothService to perform bluetooth connections
-            mBluetoothService = new BluetoothService(getActivity(), mHandler);
+            mBluetoothService = new BluetoothService(mHandler);
         }
     }
 
@@ -226,7 +230,7 @@ public class BluetoothFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater,
+    public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View rootBF = inflater.inflate(R.layout.fragment_bluetooth, container, false);
 
@@ -243,7 +247,7 @@ public class BluetoothFragment extends Fragment {
         switch_rgbLight = rootBF.findViewById(R.id.switch_rgbLight);
         pBar = rootBF.findViewById(R.id.pb_main_fragment);
 
-        FragmentManager chart_fm = getActivity().getSupportFragmentManager();
+        FragmentManager chart_fm = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
         FragmentTransaction chart_ft = chart_fm.beginTransaction();
         chart_ft.replace(R.id.fragment_for_line_chart, new LineChartForBF())
                 .commit();
@@ -262,7 +266,7 @@ public class BluetoothFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
 
         switch_blt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -372,12 +376,12 @@ public class BluetoothFragment extends Fragment {
                 if (resultCode == Activity.RESULT_OK) {
                     // Bluetooth is now enabled, so set up a session
                     // Initialize the BluetoothService to perform bluetooth connections
-                    mBluetoothService = new BluetoothService(getActivity(), mHandler);
+                    mBluetoothService = new BluetoothService(mHandler);
                 } else {
                     // User did not enable Bluetooth or an error occurred
                     Toast.makeText(getActivity(), R.string.bt_not_enabled_leaving,
                             Toast.LENGTH_SHORT).show();
-                    getActivity().finish();
+                    Objects.requireNonNull(getActivity()).finish();
                 }
                 break;
             case SPEECH_RECOGNITION_CODE:
@@ -398,7 +402,7 @@ public class BluetoothFragment extends Fragment {
 
     private void changeRgbLight() {
         // Launch the RGBLightSelect Fragment to select RGB-color
-        FragmentManager fmL = getActivity().getSupportFragmentManager();
+        FragmentManager fmL = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
         FragmentTransaction ftL = fmL.beginTransaction();
         ftL.replace(R.id.fragment_main, new RGBLightSelect())
                 .addToBackStack(null)

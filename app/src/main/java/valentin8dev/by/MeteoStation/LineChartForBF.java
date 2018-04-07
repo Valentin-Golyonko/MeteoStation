@@ -2,6 +2,7 @@ package valentin8dev.by.MeteoStation;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -94,7 +95,7 @@ public class LineChartForBF extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootLC = inflater.inflate(R.layout.bf_line_chart, container, false);
 
         chart = rootLC.findViewById(R.id.line_chart);

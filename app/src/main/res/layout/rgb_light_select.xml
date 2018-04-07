@@ -13,11 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        style="@style/my"
         card_view:cardCornerRadius="5dp"
         card_view:cardElevation="1dp">
 
@@ -31,7 +27,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:text="asdsadadadada"
+                android:text="@string/color_code"
                 android:id="@+id/colorPickerTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -47,11 +43,7 @@
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        style="@style/my"
         card_view:cardCornerRadius="5dp"
         card_view:cardElevation="1dp">
 
@@ -69,13 +61,8 @@
     <android.support.v7.widget.CardView
         android:id="@+id/cv_btn_ok"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_height="55dp"
+        style="@style/my"
         android:clickable="true"
         android:focusable="true"
         card_view:cardCornerRadius="5dp"
@@ -86,7 +73,7 @@
             style="@style/Base.Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+            android:layout_gravity="center"
             android:background="@color/cardview_light_background"
             android:text="@string/btn_OK"
             android:textSize="18sp"/>

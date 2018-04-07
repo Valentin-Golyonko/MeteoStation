@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 class MyXAxisValueFormatter implements IAxisValueFormatter {
 
-    private ArrayList<String> valuesA = new ArrayList<>();
+    private ArrayList<String> valuesA;
 
     MyXAxisValueFormatter(ArrayList<String> values) {
         this.valuesA = values;
