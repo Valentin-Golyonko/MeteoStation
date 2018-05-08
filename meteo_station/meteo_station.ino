@@ -56,7 +56,7 @@ RTC_DS3231 rtc;
 #define REDPIN 10 // RGB Strip pins
 #define GREENPIN 11
 #define BLUEPIN 9
-int r_in, g_in, b_in; // RGB color define
+int r_in = 100, g_in = 100, b_in = 100; // RGB color define
 bool done = false;
 
 long previousMillis_1 = 0; // will store last time status was updated
@@ -81,10 +81,6 @@ float delta_t1 = 0;
 float delta_t2 = 0;
 
 void setup() {
-
-  // UART speed
-  //Serial.begin(9600);
-  SerialBLE.begin(9600);
 
   // actions with display
   display.begin(SSD1306_SWITCHCAPVCC, 0x3C);  // initialize with the I2C addr 0x3C (for the 128x64)
@@ -112,12 +108,18 @@ void setup() {
 
   // declare digital pins
   pinMode(relayPin, OUTPUT);
-  digitalWrite(relayPin , LOW);    // turn OFF relay !!!
+  digitalWrite(relayPin , HIGH);    // turn OFF relay !!!
+  // it depends on connection to relay - green led mast be OFF
+  // in that case relay is OFF -> no power consuming
   pinMode(pirInputPin, INPUT);      // declare rip-sensor as input
   digitalWrite(pirInputPin , LOW);
   pinMode(BlueLedPin, OUTPUT); // Blue Led
   digitalWrite(BlueLedPin, HIGH);
   pinMode(GreenLedPin, OUTPUT); // green led
+
+  // UART speed
+  //Serial.begin(9600);
+  SerialBLE.begin(9600);
 }
 
 void loop() {
@@ -163,13 +165,12 @@ void loop() {
     previousMillis_3 = currentMillis;
     if (!light_always) {
       if (pir == LOW) {
-        RGBStrip(0, 0, 0);    // rgb off
-        digitalWrite(relayPin, LOW);  // turn LED OFF
+        digitalWrite(relayPin, HIGH);  // turn LED OFF
       }
     }
   }
 
-  // update text on the display every 5s (by seting flag)
+  // update text on the display every 5s (by setting flag)
   if (currentMillis - previousMillis_4 >= 5000) { // timer 5 sec for every action
     previousMillis_4 = currentMillis;
 
@@ -199,7 +200,7 @@ void loop() {
 
   // temperature correction: get offset
   if (correction_delta) {
-    if (currentMillis - previousMillis_6 >= 600000) { // temer = 10 min
+    if (currentMillis - previousMillis_6 >= 600000) { // timer = 10 min
       delta_t1 = t1 - t1_zero;
       delta_t2 = t2 - t1_zero;
       correction_delta = false;
@@ -214,8 +215,8 @@ void ListenBlt() {
       // read input bytes
       ch_data[i] = SerialBLE.read();
       delay(10);    // magic! for stable receiving
-      //      Serial.println("-----------");
-      //      Serial.println(ch_data[i], DEC);
+      //Serial.println("-----------");
+      //Serial.println(ch_data[i], DEC);
       count++;
       // i use only 2 bytes (2^16-1), ex-pl:  0010 0011 1101 1100  = 9180 (int)
       if (count == 4) {
@@ -225,7 +226,7 @@ void ListenBlt() {
                 (int)(unsigned char)(ch_data[2]) << 8 |
                 (int)(unsigned char)(ch_data[3]);
 
-        //        Serial.println(a, DEC);
+        //Serial.println(a, DEC);
         GetCommand(a);
         count = 0;
       }
@@ -242,25 +243,24 @@ void GetCommand(int in) {
       blt = true;
       period = (in % 1000) * 1000;  // in % 1000 = 5 -> 5sec = 5000ms
       digitalWrite(GreenLedPin, HIGH);
-      //      Serial.println(blt);
-      //      Serial.println(period);
+      //Serial.println(blt);
+      //Serial.println(period);
       break;
     case 2: // stop date transfer
       blt = false;
       digitalWrite(GreenLedPin, LOW);
-      //      Serial.println(blt);
+      //Serial.println(blt);
       break;
     case 3:
       // 3002 <= in <= 3000, relayPin + ON always / OFF
       switch (in % 1000) {
-        case 2: // TODO: last saved on devaice
-          digitalWrite(relayPin , 1);
+        case 2:
+          digitalWrite(relayPin , LOW);
           light_always = true;
-          RGBStrip(r_in, g_in, b_in); // TODO: last saved
+          RGBStrip(r_in, g_in, b_in);
           break;
         case 0:
-          RGBStrip(0, 0, 0);
-          digitalWrite(relayPin , 0);
+          digitalWrite(relayPin , HIGH);
           light_always = false;
           break;
       }
@@ -338,7 +338,7 @@ void Transmit(float t1, float t2, float h, float a, float d, int p, int r) {
 
 void PIR(int val) {
   if (val == HIGH) {  // check if the input is HIGH
-    digitalWrite(relayPin, HIGH);  // turn LED ON
+    digitalWrite(relayPin, LOW);  // turn LED ON
     RGBStrip(100, 100, 100); // Color = Red
     if (pir == LOW) {
       //Serial.println("Motion detected!");
@@ -372,6 +372,10 @@ void RTC() {
 }
 
 void RGBStrip(int r, int g, int b) {
+  r_in = r; // save last state
+  g_in = g;
+  b_in = b;
+
   analogWrite(REDPIN , r);
   analogWrite(GREENPIN , g);
   analogWrite(BLUEPIN , b);
