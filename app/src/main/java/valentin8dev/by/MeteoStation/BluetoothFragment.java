@@ -460,7 +460,7 @@ public class BluetoothFragment extends Fragment {
         }
 
         String rgbLight = InputRecognition.rgbLight;
-        if (rgbLight.equals("1")) {
+        if (rgbLight.equals("0")) {
             switch_rgbLight.setChecked(true);
         } else {
             switch_rgbLight.setChecked(false);
