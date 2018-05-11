@@ -3,7 +3,6 @@ package valentin8dev.by.MeteoStation;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.CardView;
@@ -12,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.skydoves.colorpickerview.ColorListener;
@@ -32,6 +32,18 @@ public class RGBLightSelect extends Fragment {
     public static int rgbColor_i;
     private ColorPickerView mColorPickerView;
     private LinearLayout llColorPicker;
+    public SeekBar sSeekBar;
+    static float sb_progress = 70f;
+    private TextView tv_sb;
+
+    public static float getSb_progress() {
+        return sb_progress;
+    }
+
+    public static void setSb_progress(float sb_progress) {
+        RGBLightSelect.sb_progress = sb_progress;
+        Log.d(TAG, "progress: " + String.valueOf(sb_progress));
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,15 +73,32 @@ public class RGBLightSelect extends Fragment {
             }
         });
 
-        CardView cv_ok = v.findViewById(R.id.cv_btn_ok);
-        cv_ok.setOnClickListener(new View.OnClickListener() {
+        llColorPicker = v.findViewById(R.id.colorPickerLl);
+
+        tv_sb = v.findViewById(R.id.seek_bar_progress);
+
+        sSeekBar = v.findViewById(R.id.seekBar_rgb);
+        sSeekBar.setProgress((int) getSb_progress());
+        sSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
-            public void onClick(View view) {
-                closeFragment();
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                sSeekBar = seekBar;
+                setSb_progress(progress);
+
+                tv_sb.setText(String.valueOf(progress));
+                setRGBLight(rgbColor, getSb_progress());
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                sSeekBar = seekBar;
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                sSeekBar = seekBar;
             }
         });
-
-        llColorPicker = v.findViewById(R.id.colorPickerLl);
 
         return v;
     }
@@ -89,10 +118,10 @@ public class RGBLightSelect extends Fragment {
         rgbColor_i = color;
         //Log.d(TAG, "color " + Arrays.toString(rgbColor));
 
-        setRGBLight(rgbColor);
+        setRGBLight(rgbColor, getSb_progress());
     }
 
-    private void setRGBLight(int[] color) {
+    private void setRGBLight(int[] color, float progress) {
 
         // R = 10 255 - 10 000  color[0]
         // G = 11 255 - 11 000  color[1]
@@ -104,10 +133,11 @@ public class RGBLightSelect extends Fragment {
                 OutputStream outputStream = BluetoothService.getmSocket().getOutputStream();
 
                 int[] value = new int[3];
-                value[0] = 10000 + color[0];
-                value[1] = 11000 + color[1];
-                value[2] = 13000 + color[2];
-                Log.d(TAG, Arrays.toString(value));
+                value[0] = 10000 + (int) (color[0] * progress/100);
+                value[1] = 11000 + (int) (color[1] * progress/100);
+                value[2] = 13000 + (int) (color[2] * progress/100);
+
+                Log.d(TAG, "RGB: " + Arrays.toString(value));
 
                 // set rgb strip color
                 for (int i = 0; i < 3; i++) {

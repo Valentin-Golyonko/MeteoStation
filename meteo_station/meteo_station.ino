@@ -109,8 +109,8 @@ void setup() {
   // declare digital pins
   pinMode(relayPin, OUTPUT);
   digitalWrite(relayPin , HIGH);    // turn OFF relay !!!
-  // it depends on connection to relay - green led mast be OFF
-  // in that case relay is OFF -> no power consuming
+                                    // it depends on connection to relay - green led mast be OFF
+                                    // in that case relay is OFF -> no power consuming
   pinMode(pirInputPin, INPUT);      // declare rip-sensor as input
   digitalWrite(pirInputPin , LOW);
   pinMode(BlueLedPin, OUTPUT); // Blue Led
@@ -165,6 +165,7 @@ void loop() {
     previousMillis_3 = currentMillis;
     if (!light_always) {
       if (pir == LOW) {
+        RGBStrip(0,0,0);
         digitalWrite(relayPin, HIGH);  // turn LED OFF
       }
     }
@@ -260,6 +261,7 @@ void GetCommand(int in) {
           RGBStrip(r_in, g_in, b_in);
           break;
         case 0:
+          RGBStrip(0,0,0);
           digitalWrite(relayPin , HIGH);
           light_always = false;
           break;
@@ -372,9 +374,9 @@ void RTC() {
 }
 
 void RGBStrip(int r, int g, int b) {
-  r_in = r; // save last state
-  g_in = g;
-  b_in = b;
+  //r_in = r; // save last state
+  //g_in = g;
+  //b_in = b;
 
   analogWrite(REDPIN , r);
   analogWrite(GREENPIN , g);

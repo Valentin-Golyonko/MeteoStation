@@ -58,8 +58,9 @@
 
     </android.support.v7.widget.CardView>
 
+
     <android.support.v7.widget.CardView
-        android:id="@+id/cv_btn_ok"
+        android:id="@+id/cv_seek_bar"
         android:layout_width="match_parent"
         android:layout_height="55dp"
         style="@style/my"
@@ -68,15 +69,48 @@
         card_view:cardCornerRadius="5dp"
         card_view:cardElevation="1dp">
 
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/rgb_btn_ok"
-            style="@style/Base.Widget.AppCompat.Button.Borderless"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@color/cardview_light_background"
-            android:text="@string/btn_OK"
-            android:textSize="18sp"/>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_gravity="center"
+                android:text="100%"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/seek_bar_progress"/>
+
+            <SeekBar
+                style="@style/my"
+                android:id="@+id/seekBar_rgb"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cv_btns"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        style="@style/my"
+        android:clickable="true"
+        android:focusable="true"
+        card_view:cardCornerRadius="5dp"
+        card_view:cardElevation="1dp">
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/rgb_btn_ok"
+                style="@style/Base.Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@color/cardview_light_background"
+                android:text="@string/btn_OK"
+                android:textSize="18sp"/>
+
     </android.support.v7.widget.CardView>
 
 </LinearLayout>
