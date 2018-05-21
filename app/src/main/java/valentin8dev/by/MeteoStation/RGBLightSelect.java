@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatButton;
-import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,16 +32,16 @@ public class RGBLightSelect extends Fragment {
     private ColorPickerView mColorPickerView;
     private LinearLayout llColorPicker;
     public SeekBar sSeekBar;
-    static float sb_progress = 70f;
+    static float brightness = 70f;
     private TextView tv_sb;
 
-    public static float getSb_progress() {
-        return sb_progress;
+    public static float getBrightness() {
+        return brightness;
     }
 
-    public static void setSb_progress(float sb_progress) {
-        RGBLightSelect.sb_progress = sb_progress;
-        Log.d(TAG, "progress: " + String.valueOf(sb_progress));
+    public static void setBrightness(float brightness) {
+        RGBLightSelect.brightness = brightness;
+        Log.d(TAG, "progress: " + String.valueOf(brightness));
     }
 
     @Override
@@ -78,15 +77,15 @@ public class RGBLightSelect extends Fragment {
         tv_sb = v.findViewById(R.id.seek_bar_progress);
 
         sSeekBar = v.findViewById(R.id.seekBar_rgb);
-        sSeekBar.setProgress((int) getSb_progress());
+        sSeekBar.setProgress((int) getBrightness());
         sSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 sSeekBar = seekBar;
-                setSb_progress(progress);
+                setBrightness(progress);
 
                 tv_sb.setText(String.valueOf(progress));
-                setRGBLight(rgbColor, getSb_progress());
+                setRGBLight(rgbColor, getBrightness());
             }
 
             @Override
@@ -106,7 +105,7 @@ public class RGBLightSelect extends Fragment {
     // TODO: last piked or saved position (color)
     private void setRGBColor(int color) {
 
-        // TODO: add to setings: selector - "add color index/code"
+        // TODO: add to settings: selector - "add color index/code"
         TextView textView = Objects.requireNonNull(getActivity()).findViewById(R.id.colorPickerTv);
         String rgbColorHtml = mColorPickerView.getColorHtml();
         textView.setText(MessageFormat.format("#{0}", rgbColorHtml));
@@ -118,7 +117,7 @@ public class RGBLightSelect extends Fragment {
         rgbColor_i = color;
         //Log.d(TAG, "color " + Arrays.toString(rgbColor));
 
-        setRGBLight(rgbColor, getSb_progress());
+        setRGBLight(rgbColor, getBrightness());
     }
 
     private void setRGBLight(int[] color, float progress) {
