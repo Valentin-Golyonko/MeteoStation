@@ -1,7 +1,7 @@
 # MeteoStation
 The application reads data over bluetooth from a home weather station built on arduino nano v3.
 
-<p><b>UPD</b> (08.05.18): Project closed or better to say splitted into 2 different (<a href="https://github.com/Valentin-Golyonko/RGBStripControl_Arduino">1</a> and <a href="https://github.com/Valentin-Golyonko/">TBD</a>) because of high power consuming (around 260mA, arduino nano Imax = 200mA) and so work limitation for chip (ex: 1 strange bug on pin 9 for RGB-Strip).</p>
+<p><b>UPD</b> (08.05.18): Project closed or better to say splitted into 2 different (<a href="https://github.com/Valentin-Golyonko/RGBStripControl_Arduino">1</a> and <a href="https://github.com/Valentin-Golyonko/esp8266_inHome_weather/">2</a>) because of high power consuming (around 260mA, arduino nano Imax = 200mA) and so work limitation for chip (ex: 1 strange bug on pin 9 for RGB-Strip).</p>
 
 <p>Arduino firmware file:
 <a href="https://github.com/Valentin-Golyonko/MeteoStation/blob/master/meteo_station/meteo_station.ino">meteo_station.ino</a></p>
